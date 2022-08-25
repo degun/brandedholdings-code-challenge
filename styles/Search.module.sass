@@ -1,0 +1,62 @@
+@keyframes appear
+    to
+        opacity: 1
+        transform: translateY(0px)
+
+.search
+    width: 500px
+    height: 55px
+    position: relative
+    overflow: visible
+    border-radius: 4px
+    z-index: 2
+    .bar
+      display: flex
+      align-items: center
+      padding: 0 15px
+      input
+        padding: 15px
+        font-size: 1.3rem
+        font-weight: bold
+        border: none
+        background-color: transparent
+        flex-grow: 1
+        &:focus
+          border: none
+          outline: none
+    ul
+      margin: 0
+      border-radius: 4px
+      background-color: #fff
+      padding-left: 0
+      li
+        list-style-type: none
+        font-size: 1rem
+        display: flex
+        justify-content: space-between
+        align-items: center
+        padding: 10px 50px
+        transform: translateY(10px)
+        opacity: 0
+        animation: 0.3s appear forwards
+        &:hover
+          cursor: pointer
+        &:last-child
+          border-bottom-left-radius: 4px
+          border-bottom-right-radius: 4px
+        &.selected
+          background-color: rgba(0, 0, 0, 0.1)
+        &.selected .name
+          text-decoration: underline
+        .name-region
+          display: flex
+          flex-direction: column
+          color: #333
+          .name
+            font-size: 1rem
+          .region
+            font-size: 0.8rem
+            color: #999
+        .coordinates
+          font-size: 0.8rem
+          color: #999
