@@ -1,26 +1,30 @@
-import { useState, useEffect, ChangeEvent, KeyboardEvent } from 'react';
+import {
+  useState,
+  useEffect,
+  ChangeEvent,
+  MouseEvent,
+  KeyboardEvent,
+  Dispatch,
+  SetStateAction,
+} from 'react';
 import type { NextPage } from 'next';
 import { useDebounce } from '../utils/hooks';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import styles from '../styles/Search.module.css';
+import styles from '../styles/Search.module.sass';
+import { City } from './index';
 config.autoAddCss = false;
 
-interface Result {
-  id: number;
-  name: string;
-  region: string;
-  country: string;
-  lat: number;
-  lon: number;
-  url: string;
+interface Props {
+  setCurrentCity: Dispatch<SetStateAction<City>>;
+  setCities: Dispatch<SetStateAction<City[]>>;
 }
 
-const Search: NextPage = () => {
+const Search: NextPage<Props> = ({ setCurrentCity, setCities }) => {
   const [value, setValue] = useState<string>('');
-  const [results, setResults] = useState<Result[]>([]);
+  const [results, setResults] = useState<City[]>([]);
   const [visible, setVisible] = useState<Boolean>(false);
   const [selected, setSelected] = useState<number>(0);
   const [isLoading, setLoading] = useState<Boolean>(false);
@@ -42,8 +46,28 @@ const Search: NextPage = () => {
       setVisible(false);
     }
     if (e.key == 'Enter') {
-      setVisible(true);
+      if (visible) {
+        select();
+      } else {
+        setVisible(true);
+      }
     }
+  }
+
+  function select(e?: MouseEvent<HTMLLIElement>){
+    e?.preventDefault();
+    const city = results[selected];
+    setValue('');
+    setVisible(false);
+    setCurrentCity(city);
+    setCities((cities) => {
+      const ids = cities.map(({id}) => id);
+      if(ids.includes(city.id)){
+        return cities
+      }else{
+        return [city, ...cities]}
+      }
+    );
   }
 
   useEffect(() => {
@@ -67,17 +91,17 @@ const Search: NextPage = () => {
 
   return (
     <div className={styles.search} onKeyDown={handleKeyDown}>
-        <div className={styles.bar}>
-            <FontAwesomeIcon icon={faSearch} size="lg" />
-            <input
-                value={value}
-                onChange={handleChange}
-                placeholder='Search city'
-                onFocus={() => setVisible(true)}
-                onBlur={() => setVisible(false)}
-            />
-            {isLoading && <FontAwesomeIcon icon={faSpinner} size="lg" />}
-        </div>
+      <div className={styles.bar}>
+        <FontAwesomeIcon icon={faSearch} size='lg' />
+        <input
+          value={value}
+          onChange={handleChange}
+          placeholder='Search city'
+          onFocus={() => setVisible(true)}
+          onBlur={() => setVisible(false)}
+        />
+        {isLoading && <FontAwesomeIcon icon={faSpinner} size='lg' />}
+      </div>
       {
         <ul>
           {visible &&
@@ -87,6 +111,7 @@ const Search: NextPage = () => {
                 className={selected === i ? styles.selected : undefined}
                 style={{ animationDelay: `${i * 15}ms` }}
                 onMouseOver={() => setSelected(i)}
+                onClick={select}
               >
                 <div className={styles['name-region']}>
                   <div className={styles.name}>{name}</div>

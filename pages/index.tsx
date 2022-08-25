@@ -1,24 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Search from './Search';
+import Cities from './Cities';
+import Weather from './Weather';
 import styles from '../styles/Home.module.css';
 
-const Home: NextPage = () => {
-  const [q, setQ] = useState('41.32,19.88');
-  const [isLoading, setLoading] = useState<Boolean>(false);
+export interface City {
+    id?: number;
+    name?: string;
+    region?: string;
+    country?: string;
+    lat?: number;
+    lon?: number;
+    url?: string;
+  }
 
-  useEffect(() => {
-    setLoading(true);
-    fetch(`https://api.weatherapi.com/v1/current.json?key=f27e122711544d58877135356222408&q=${q}&aqi=no`)
-      .then((res) => res.json())
-      .then((data) => {
-        const { location } = data;
-        console.log({data, location})
-        setQ(`${location.lat},${location.lon}`);
-        setLoading(false);
-      });
-  }, []);
+const Home: NextPage = () => {
+  const [currentCity, setCurrentCity] = useState<City>({});
 
   return (
     <div className={styles.container}>
@@ -29,7 +27,8 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <Search />
+        <Cities currentCity={currentCity} setCurrentCity={setCurrentCity} />
+        <Weather currentCity={currentCity} />
       </main>
       <footer className={styles.footer}></footer>
     </div>
