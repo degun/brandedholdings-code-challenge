@@ -14,18 +14,19 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import styles from '../styles/Search.module.sass';
-import { City } from './index';
+import { Location } from './types';
 config.autoAddCss = false;
 
 interface Props {
-  setCurrentCity: Dispatch<SetStateAction<City>>;
-  setCities: Dispatch<SetStateAction<City[]>>;
+  setCurrentCity: Dispatch<SetStateAction<Location>>;
+  setCities: Dispatch<SetStateAction<Location[]>>;
 }
 
 const Search: NextPage<Props> = ({ setCurrentCity, setCities }) => {
   const [value, setValue] = useState<string>('');
-  const [results, setResults] = useState<City[]>([]);
+  const [results, setResults] = useState<Location[]>([]);
   const [visible, setVisible] = useState<Boolean>(false);
+  const [active, setActive] = useState<Boolean>(false);
   const [selected, setSelected] = useState<number>(0);
   const [isLoading, setLoading] = useState<Boolean>(false);
 
@@ -54,20 +55,21 @@ const Search: NextPage<Props> = ({ setCurrentCity, setCities }) => {
     }
   }
 
-  function select(e?: MouseEvent<HTMLLIElement>){
+  function select(e?: MouseEvent<HTMLLIElement>) {
+    console.log(e);
     e?.preventDefault();
     const city = results[selected];
     setValue('');
     setVisible(false);
     setCurrentCity(city);
     setCities((cities) => {
-      const ids = cities.map(({id}) => id);
-      if(ids.includes(city.id)){
-        return cities
-      }else{
-        return [city, ...cities]}
+      const ids = cities.map(({ id }) => id);
+      if (ids.includes(city.id)) {
+        return cities;
+      } else {
+        return [city, ...cities];
       }
-    );
+    });
   }
 
   useEffect(() => {
@@ -90,15 +92,24 @@ const Search: NextPage<Props> = ({ setCurrentCity, setCities }) => {
   }, [q]);
 
   return (
-    <div className={styles.search} onKeyDown={handleKeyDown}>
+    <div className={`${styles.search} ${active ? styles.active : ''}`} onKeyDown={handleKeyDown}>
       <div className={styles.bar}>
         <FontAwesomeIcon icon={faSearch} size='lg' />
         <input
           value={value}
           onChange={handleChange}
           placeholder='Search city'
-          onFocus={() => setVisible(true)}
-          onBlur={() => setVisible(false)}
+          onFocus={() => {
+            setActive(true);
+            setVisible(true);
+          }}
+          onBlur={() => {
+            // set a timeout so that the li.onclick event gets triggered. 300ms of timeout does no harm
+            setActive(false);
+            setTimeout(() => {
+              setVisible(false);
+            }, 100);
+          }}
         />
         {isLoading && <FontAwesomeIcon icon={faSpinner} size='lg' />}
       </div>
@@ -115,7 +126,9 @@ const Search: NextPage<Props> = ({ setCurrentCity, setCities }) => {
               >
                 <div className={styles['name-region']}>
                   <div className={styles.name}>{name}</div>
-                  <div className={styles.region}>{`${region}, ${country}`}</div>
+                  <div className={styles.region}>{`${
+                    region ? `${region}, ` : ''
+                  }${country}`}</div>
                 </div>
                 <div className={styles.coordinates}>{`${lat}, ${lon}`}</div>
               </li>

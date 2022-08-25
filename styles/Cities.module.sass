@@ -1,43 +1,44 @@
+@import 'variables.sass'
+
 @keyframes appear
   to
     opacity: 1
-    transform: translateY(0px)
+    transform: translateX(0px)
 
 .cities
   width: 500px
+  padding-top: 55px
   .cities-list
     margin-top: 20px
     border: 1px solid rgba(255, 255, 255, 0.2)
-    border-radius: 4px
-    border: 1px solid #f5f5f5
+    border-radius: 10px
     ul
       margin: 0
-      border-bottom-left-radius: 4px
-      border-bottom-right-radius: 4px
+      border-radius: 10px
       padding-left: 0
+      height: 560px
       li
         list-style-type: none
         font-size: 1rem
         display: flex
         justify-content: space-between
-        align-items: center
+        align-items: flex-end
         padding: 30px 15px
-        transform: translateY(10px)
-        border-radius: 4px
+        transform: translateX(-10px)
+        border-radius: 10px
         opacity: 0
-        border-bottom: 1px solid #f5f5f5
         animation: 0.3s appear forwards
         &:hover
           cursor: pointer
         &.selected
-          background-color: #43a2ef
-        &.selected
+          background-color: $highlighted-background
           .name-region
             .name, .region
-              color: #fff
+              color: $primary-color
           .coordinates
-            color: #fff
+            color: $primary-color
         .name-region
+          height: 100%
           display: flex
           flex-direction: column
         .name-region .name
@@ -45,20 +46,48 @@
           font-weight: bold
         .name-region .region
           font-size: 1.2rem
-          color: #999
+          color: $lighter-primary-text
         .coordinates
-          font-size: 1.2rem
-          color: #999
+          font-size: 1rem
+          color: $lighter-primary-text
+        .remove
+          position: absolute
+          right: 15px
+          top: 15px
+          width: 30px
+          height: 30px
+          display: flex
+          justify-content: center
+          align-items: center
+          border-radius: 50%
+          color: $light-danger-color
+          transition: 0.3s background-color ease
+          &:hover
+            cursor: pointer
+            background-color: $light-danger-color
+            color: $danger-color
   .pagination
     display: flex
     justify-content: space-between
     align-items: center
-    padding: 30px 15px
-    .previous, .next
-      color: #999
+    padding: 30px 0px
+    button
+      color: $primary-text
       font-size: 1.2rem
       display: flex
       align-items: center
+      padding: 15px
+      border: none
+      outline: none
+      background-color: transparent
+      border-radius: 10px
+      transition: 0.3s background-color ease
       &:hover
         cursor: pointer
-        color: #333
+        background-color: $lighter-highlighted-background
+        color: $primary-color
+      &:disabled
+        color: $lighter-primary-text
+        &:hover
+          background-color: transparent
+          cursor: default

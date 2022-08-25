@@ -1,2 +1,230 @@
+@import 'variables.sass'
+
+@keyframes appear
+  to
+    opacity: 1
+    transform: translateY(0px)
+
 .weather
-  width: 1200px
+  width: 800px
+  &.sunny
+    .current, ul.daily li.selected
+      background-color: $sunny-color
+    .current .right .data, ul.hourly li, ul.daily li
+      background-color: $lighter-sunny-color
+  &.rainy
+    .current, ul.daily li.selected
+      color: $lighter-rainy-color
+      background-color: $rainy-color
+    .current .right .data, ul.hourly li, ul.daily li
+      color: $rainy-color
+      background-color: $lighter-rainy-color
+  &.snowy
+    .current, ul.daily li.selected
+      background-color: $snowy-color
+    .current .right .data, ul.hourly li, ul.daily li
+      background-color: $lighter-snowy-color
+  &.clear
+    .current, ul.daily li.selected
+      color: white
+      background-color: $clear-color
+    .current .right .data, ul.hourly li, ul.daily li
+      color: $clear-color
+      background-color: $lighter-clear-color
+  &.cloudy
+    .current, ul.daily li.selected
+      color: $lighter-cloudy-color
+      background-color: $cloudy-color
+    .current .right .data, ul.hourly li, ul.daily li
+      color: #333
+      background-color: $lighter-cloudy-color
+  .header
+    width: 100%
+    height: 60px
+    margin-bottom: 15px
+    display: flex
+    align-items: center
+    input[type=checkbox]
+      margin-left: 10px
+  .current
+    display: flex
+    width: 100%
+    height: 300px
+    padding: 15px
+    background-color: $sunny-color
+    border-radius: 10px
+    transition: 0.3s background-color ease
+    gap: 15px
+    &.clear
+      background-color: $clear-color
+      .right .data
+        transition: 0.3s background-color ease
+        background-color: $lighter-clear-color
+    .left
+      display: flex
+      flex-direction: column
+      justify-content: space-between
+      align-items: center
+      width: 50%
+      .head
+        width: 100%
+        display: flex
+        justify-content: space-between
+        align-items: center
+        .city
+          font-size: 1.1rem
+          white-space: nowrap
+          svg
+            margin-right: 8px
+      .main
+        display: flex
+        flex-direction: column
+        align-items: center
+        justify-content: center
+        margin-top: -25px
+        .temp
+          font-size: 4rem
+          font-weight: lighter
+        .feelslike
+          font-size: 0.8rem
+      .foot
+        width: 100%
+        display: flex
+        justify-content: space-between
+        align-items: center
+        .visibility, .precipitation
+          display: flex
+          flex-direction: row
+          justify-content: flex-start
+          align-items: center
+          svg
+            margin-right: 6px
+    .right
+      width: 50%
+      .data
+        display: flex
+        flex-direction: column
+        justify-content: space-between
+        width: 100%
+        height: 100%
+        border-radius: 10px
+        padding: 15px
+        background-color: $lighter-sunny-color
+        transition: 0.3s background-color ease
+        .image
+          width: 100%
+          height: 50%
+          display: flex
+          justify-content: center
+          align-items: center
+          img
+            width: 100px
+        .statistics
+          display: flex
+          flex-direction: column
+          justify-content: flex-end
+          .row
+            display: flex
+            justify-content: space-between
+            align-items: center
+            width: 100%
+            padding: 5px 0
+            &:last-child
+              padding-bottom: 0px
+            .left
+              width: max-content
+              display: flex
+              flex-direction: row
+              justify-content: flex-start
+              align-items: center
+              svg
+                margin-right: 6px
+            .right
+              width: max-content
+              text-align: right
+  ul.hourly
+    display: flex
+    flex-direction: row
+    gap: 15px
+    width: 100%
+    height: auto
+    overflow-x: auto
+    padding: 0
+    li
+      display: flex
+      flex-direction: column
+      justify-content: space-between
+      align-items: center
+      height: 200px
+      flex-basis: 150px
+      flex-grow: 0
+      flex-shrink: 0
+      padding: 15px
+      border-radius: 10px
+      background-color: $highlighted-background
+      transform: translateY(-10px)
+      border-radius: 10px
+      opacity: 0
+      transition: 0.3s background-color ease
+      animation: 0.2s appear forwards
+      .hour
+        font-size: 1rem
+        font-weight: lighter
+      .temperature
+        font-size: 2rem
+        font-weight: lighter
+      img
+        width: 60px
+        height: auto
+  ul.daily
+    width: 100%
+    padding: 0
+    li
+      list-style-type: none
+      width: 100%
+      padding: 15px
+      display: flex
+      justify-content: space-between
+      align-items: center
+      border-radius: 10px
+      background-color: $lighter-highlighted-background
+      margin-bottom: 15px
+      transform: translateY(-10px)
+      transition: 0.3s background-color ease
+      animation: 0.3s appear forwards
+      &.selected
+        background-color: $lighter-primary-color
+      &:hover
+        cursor: pointer
+      .city
+        .weekday
+          font-size: 1.2rem
+          font-weight: 600
+        .short-date
+          font-weight: 400
+      .right
+        display: flex
+        justify-content: flex-end
+        align-items: center
+        gap: 30px
+        .row
+          width: 90px
+          display: flex
+          justify-content: space-between
+          font-size: 1rem
+        .col
+          width: 60px
+          height: 100%
+          display: flex
+          flex-direction: column
+          justify-content: space-between
+          .row
+            width: 100%
+            display: flex
+            justify-content: space-between
+            font-size: 0.8rem
+        .temperature
+          width: 100px
+          font-size: 2rem
+          font-weight: lighter
+          text-align: right

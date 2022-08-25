@@ -1,3 +1,5 @@
+@import 'variables.sass'
+
 @keyframes appear
     to
         opacity: 1
@@ -9,11 +11,18 @@
     position: relative
     overflow: visible
     border-radius: 4px
+    background-color: $lighter-highlighted-background
+    margin-left: -250px
+    transition: 0.3s background-color ease
     z-index: 2
+    &.active svg
+      fill: $lighter-primary-color
     .bar
       display: flex
       align-items: center
       padding: 0 15px
+      svg
+        fill: $highlighted-background !important
       input
         padding: 15px
         font-size: 1.3rem
@@ -32,10 +41,11 @@
       li
         list-style-type: none
         font-size: 1rem
+        background-color: $lighter-highlighted-background
         display: flex
         justify-content: space-between
         align-items: center
-        padding: 10px 50px
+        padding: 15px
         transform: translateY(10px)
         opacity: 0
         animation: 0.3s appear forwards
@@ -45,18 +55,23 @@
           border-bottom-left-radius: 4px
           border-bottom-right-radius: 4px
         &.selected
-          background-color: rgba(0, 0, 0, 0.1)
+          background-color: $highlighted-background
+          .name-region
+            .name, .region
+              color: $primary-color
+          .coordinates
+            color: $primary-color
         &.selected .name
           text-decoration: underline
         .name-region
           display: flex
           flex-direction: column
-          color: #333
+          color: $primary-text
           .name
             font-size: 1rem
           .region
             font-size: 0.8rem
-            color: #999
+            color: $lighter-primary-text
         .coordinates
           font-size: 0.8rem
-          color: #999
+          color: $lighter-primary-text
