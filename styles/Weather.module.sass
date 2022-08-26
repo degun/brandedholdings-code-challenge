@@ -21,8 +21,10 @@
       background-color: $lighter-rainy-color
   &.snowy
     .current, ul.daily li.selected
+      color: #333
       background-color: $snowy-color
     .current .right .data, ul.hourly li, ul.daily li
+      color: #666
       background-color: $lighter-snowy-color
   &.clear
     .current, ul.daily li.selected
@@ -44,8 +46,7 @@
     margin-bottom: 15px
     display: flex
     align-items: center
-    input[type=checkbox]
-      margin-left: 10px
+    position: relative
   .current
     display: flex
     width: 100%
@@ -190,6 +191,7 @@
       background-color: $lighter-highlighted-background
       margin-bottom: 15px
       transform: translateY(-10px)
+      overflow-x: hidden
       transition: 0.3s background-color ease
       animation: 0.3s appear forwards
       &.selected
@@ -228,3 +230,24 @@
           font-size: 2rem
           font-weight: lighter
           text-align: right
+
+@media screen and (max-width: 1200px)
+  .weather
+    width: 100%
+    display: none
+    &.mobileShow
+      display: block
+
+@media screen and (max-width: 670px)
+  .weather
+    .current
+      flex-direction: column
+      height: 600px
+      .left, .right
+        width: 100%
+        height: 50%
+    ul.daily
+      li
+        .right
+          .optional
+            display: none

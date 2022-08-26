@@ -7,9 +7,28 @@
 
 .cities
   width: 500px
-  padding-top: 55px
+  &.dark
+    .cities-list
+      border: none
+      background-color: $lighter-grey
+      ul li.selected
+        background-color: $darker-grey
+        .name-region
+          .name, .region
+            color: $lightest-grey
+        .coordinates
+          color: $lightest-grey
+    .pagination
+      button
+        color: $lightest-grey
+        &:disabled
+          &:hover
+            color: $medium-grey
+        &:hover
+          cursor: pointer
+          background-color: $lighter-grey
+          color: #eee
   .cities-list
-    margin-top: 20px
     border: 1px solid rgba(255, 255, 255, 0.2)
     border-radius: 10px
     ul
@@ -31,7 +50,7 @@
         &:hover
           cursor: pointer
         &.selected
-          background-color: $highlighted-background
+          background-color: $lighter-primary-color
           .name-region
             .name, .region
               color: $primary-color
@@ -41,12 +60,12 @@
           height: 100%
           display: flex
           flex-direction: column
-        .name-region .name
-          font-size: 1.6rem
-          font-weight: bold
-        .name-region .region
-          font-size: 1.2rem
-          color: $lighter-primary-text
+          .name
+            font-size: 1.6rem
+            font-weight: bold
+          .region
+            font-size: 1.2rem
+            color: $lighter-primary-text
         .coordinates
           font-size: 1rem
           color: $lighter-primary-text
@@ -91,3 +110,20 @@
         &:hover
           background-color: transparent
           cursor: default
+
+@media screen and (max-width: 1200px)
+  .cities
+    width: 100%
+    display: none
+    &.mobileShow
+      display: block
+    .cities-list
+      ul
+        height: 355px
+        li
+          padding: 15px
+          .name-region
+            .name
+              font-size: 1.1rem
+            .region
+              font-size: 1rem

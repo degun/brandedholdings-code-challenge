@@ -18,11 +18,12 @@ import { Location } from './types';
 config.autoAddCss = false;
 
 interface Props {
-  setCurrentCity: Dispatch<SetStateAction<Location>>;
-  setCities: Dispatch<SetStateAction<Location[]>>;
+  setCurrentCity: Dispatch<SetStateAction<Location>>
+  setCities: Dispatch<SetStateAction<Location[]>>
+  dark: boolean
 }
 
-const Search: NextPage<Props> = ({ setCurrentCity, setCities }) => {
+const Search: NextPage<Props> = ({ setCurrentCity, setCities, dark }) => {
   const [value, setValue] = useState<string>('');
   const [results, setResults] = useState<Location[]>([]);
   const [visible, setVisible] = useState<Boolean>(false);
@@ -56,7 +57,6 @@ const Search: NextPage<Props> = ({ setCurrentCity, setCities }) => {
   }
 
   function select(e?: MouseEvent<HTMLLIElement>) {
-    console.log(e);
     e?.preventDefault();
     const city = results[selected];
     setValue('');
@@ -67,6 +67,7 @@ const Search: NextPage<Props> = ({ setCurrentCity, setCities }) => {
       if (ids.includes(city.id)) {
         return cities;
       } else {
+        localStorage.setItem('cities', JSON.stringify([city, ...cities]));
         return [city, ...cities];
       }
     });
@@ -92,7 +93,7 @@ const Search: NextPage<Props> = ({ setCurrentCity, setCities }) => {
   }, [q]);
 
   return (
-    <div className={`${styles.search} ${active ? styles.active : ''}`} onKeyDown={handleKeyDown}>
+    <div className={`${styles.search} ${active ? styles.active : ''} ${dark ? styles.dark : ''} `} onKeyDown={handleKeyDown}>
       <div className={styles.bar}>
         <FontAwesomeIcon icon={faSearch} size='lg' />
         <input

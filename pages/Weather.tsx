@@ -4,21 +4,21 @@ import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot, faWind, faWater, faThermometer, faEye, faDroplet, faTemperature0, faTemperature4 } from '@fortawesome/free-solid-svg-icons';
-import Search from './Search';
 import styles from '../styles/Weather.module.sass';
 import { Location, CurrentData, CurrentResponse, ForecastDayData, HourData } from './types';
 config.autoAddCss = false;
 
 interface Props {
+  metric: boolean
   currentCity: Location
   setCities: Dispatch<SetStateAction<Location[]>>
   setCurrentCity: Dispatch<SetStateAction<Location>>
+  mobileShow: boolean
 }
 
-const Weather: NextPage<Props> = ({ currentCity, setCities, setCurrentCity }) => {
+const Weather: NextPage<Props> = ({ metric, currentCity, setCities, mobileShow }) => {
   const [selectedDay, setSelectedDay] = useState<number>(0);
   const [data, setData] = useState<CurrentResponse | undefined>();
-  const [metric, setMetric] = useState<boolean>(true);
   const [isLoading, setLoading] = useState<boolean>(false);
 
   const q = currentCity.name ? `${currentCity.lat},${currentCity.lon}` : "auto:ip";
@@ -30,7 +30,6 @@ const Weather: NextPage<Props> = ({ currentCity, setCities, setCurrentCity }) =>
       fetch(`https://api.weatherapi.com/v1/forecast.json?key=f27e122711544d58877135356222408&q=${q}&days=5&aqi=no&alerts=no`)
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           setData(data);
           if(q === "auto:ip"){
             setCities([data.location])
@@ -87,10 +86,10 @@ const Weather: NextPage<Props> = ({ currentCity, setCities, setCurrentCity }) =>
     case currentData.condition?.text.toLowerCase().includes('clear'):
       classes.push(styles.clear);
       break;
-    case currentData.condition?.text.toLowerCase().includes('rain'):
+    case currentData.condition?.text.toLowerCase().includes('rain') || currentData.condition?.text.toLowerCase().includes('drizzle'):
       classes.push(styles.rainy);
       break;
-    case currentData.condition?.text.toLowerCase().includes('snow'):
+    case currentData.condition?.text.toLowerCase().includes('snow') || currentData.condition?.text.toLowerCase().includes('mist'):
       classes.push(styles.snowy);
       break;
     case currentData.condition?.text.toLowerCase().includes('cloud'):
@@ -99,13 +98,7 @@ const Weather: NextPage<Props> = ({ currentCity, setCities, setCurrentCity }) =>
   }
 
   return (
-    <div className={`${styles.weather} ${classes.join(" ")}`}>
-      <div className={styles.header}>
-        <Search setCurrentCity={setCurrentCity} setCities={setCities} />
-        <label>
-          Imperial <input type="checkbox" checked={!metric} onChange={checked => setMetric(!metric)} />
-        </label>
-      </div>
+    <div className={`${styles.weather} ${classes.join(" ")} ${mobileShow ? styles.mobileShow : ''}`}>
       <div className={styles.current} >
         <div className={styles.left}>
           <div className={styles.head}>
@@ -197,13 +190,13 @@ const Weather: NextPage<Props> = ({ currentCity, setCities, setCurrentCity }) =>
                 <div className={styles['short-date']}>{currentDate.toLocaleDateString('en-US', { day: '2-digit', month: 'short'})}</div>
               </div>
               <div className={styles.right}>
-                <div className={styles.row}>
+                <div className={`${styles.row} ${styles.optional}`}>
                     <FontAwesomeIcon icon={faThermometer} size="sm" /> {isLoading ? "--" : currentData.pressure} {metric ? "mb" : "in"}
                 </div>
-                <div className={styles.row}>
+                <div className={`${styles.row} ${styles.optional}`}>
                   <FontAwesomeIcon icon={faWind} size="sm" /> {isLoading ? "--" : currentData.wind} {metric ? "km/h" : "mi/h"}
                 </div>
-                <div className={styles.col}>
+                <div className={`${styles.col} ${styles.optional}`}>
                   <div className={styles.row}>
                     <FontAwesomeIcon icon={faTemperature0} size="sm" /> {isLoading ? "--" : day.mintemp}&deg;{metric ? "C" : "F"}
                   </div>

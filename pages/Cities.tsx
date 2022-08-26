@@ -8,16 +8,17 @@ interface Props {
   setCities: Dispatch<SetStateAction<Location[]>>
   currentCity: Location
   setCurrentCity: Dispatch<SetStateAction<Location>>
+  dark: boolean
+  mobileShow: boolean
 }
 
-const Cities: NextPage<Props> = ({ cities, setCities, currentCity, setCurrentCity }) => {
+const Cities: NextPage<Props> = ({ cities, setCities, currentCity, setCurrentCity, dark, mobileShow }) => {
   const [page, setPage] = useState<number>(0);
 
   // reset the page number whenever the number of cities changes
   useEffect(() => {
     setPage(0);
   }, [cities])
-
 
   // if we select a city already in the list, switch to the page containing it
   useEffect(() => {
@@ -27,25 +28,25 @@ const Cities: NextPage<Props> = ({ cities, setCities, currentCity, setCurrentCit
 
   function removeCity(e: MouseEvent<HTMLElement>, id: number | undefined){
     e.stopPropagation();
-    if(id !== undefined){
-      setCities(cities => cities.filter(city => city.id !== id));
-    }else{
-      setCities(cities => cities.filter(city => city.id !== undefined));
-    }
-    if(currentCity.id === id){
-      setCurrentCity(cities[0]);
-    }
+    setCities(cities => {
+      const newCities = cities.filter(city => city.id !== id);
+      localStorage.setItem('cities', JSON.stringify(newCities));
+      if(currentCity.id === id){
+        setCurrentCity(newCities[0]);
+      }
+      return newCities;
+    });
   }
 
   return (
-    <div className={styles.cities}>
+    <div className={`${styles.cities} ${dark ? styles.dark : ''} ${mobileShow ? styles.mobileShow : ''}`}>
       <div className={styles['cities-list']}>
         <ul>
           {cities.slice(page * 5, (page + 1) * 5).map((city, i) => {
             const { id, name, region, country, lat, lon } = city;
             return (
               <li
-                key={id}
+                key={i}
                 className={currentCity.id === id ? styles.selected : undefined}
                 style={{ animationDelay: `${i * 30}ms` }}
                 onClick={() => setCurrentCity(city)}

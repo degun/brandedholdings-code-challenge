@@ -6,23 +6,42 @@
         transform: translateY(0px)
 
 .search
-    width: 500px
+    width: 635px
     height: 55px
     position: relative
     overflow: visible
     border-radius: 4px
     background-color: $lighter-highlighted-background
-    margin-left: -250px
     transition: 0.3s background-color ease
     z-index: 2
     &.active svg
       fill: $lighter-primary-color
+    &.dark
+      background-color: $lighter-grey
+      .bar
+        input
+          color: $lightest-grey
+      ul
+        li
+          background-color: $lighter-grey
+          &.selected
+            background-color: $darker-grey
+            .name-region
+              color: $lightest-grey
+              .name
+                color: $lightest-grey
+              .region
+                color: $lightest-grey
+            .coordinates
+              color: $lightest-grey
+          .name-region
+            color: $lightest-grey
+            .region
+              color: $lightest-grey
     .bar
       display: flex
       align-items: center
       padding: 0 15px
-      svg
-        fill: $highlighted-background !important
       input
         padding: 15px
         font-size: 1.3rem
@@ -75,3 +94,8 @@
         .coordinates
           font-size: 0.8rem
           color: $lighter-primary-text
+
+@media screen and (max-width: 1200px)
+  .search
+    width: 100%
+    margin-left: 0
