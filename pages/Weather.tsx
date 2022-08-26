@@ -92,7 +92,7 @@ const Weather: NextPage<Props> = ({ metric, currentCity, setCities, mobileShow }
     case currentData.condition?.text.toLowerCase().includes('snow') || currentData.condition?.text.toLowerCase().includes('mist'):
       classes.push(styles.snowy);
       break;
-    case currentData.condition?.text.toLowerCase().includes('cloud'):
+    case currentData.condition?.text.toLowerCase().includes('cloud') || currentData.condition?.text.toLowerCase().includes('overcast'):
       classes.push(styles.cloudy);
       break;
   }
